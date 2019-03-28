@@ -1,0 +1,203 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{ctex}
+
+
+\usepackage{graphicx}%图片包
+\graphicspath{{figures/}}
+%\includegraphics[scale=0.6]{.eps}\\
+
+\usepackage{amsmath}%数学公式包
+\usepackage{amssymb}%特殊符号包
+\usepackage{bm}%加粗数学符号 \bm{math expression}
+
+\usepackage{color}%Excel2LaTeX辅助包
+\usepackage{booktabs}
+\usepackage{multirow}
+%\resizebox{120mm}{100mm}{} 调整表格大小
+\usepackage{array}
+
+\usepackage{listings}%插入代码
+\lstset{language=Matlab}
+\lstset{breaklines}%自动将长的代码行换行排版
+\lstset{extendedchars=false}%解决代码跨页时，章节标题，页眉等汉字不显示的问题
+
+\usepackage{ulem}
+
+\title{数理方程习题}
+\author{中国语言文学系常代表办公室}
+\renewcommand{\today}{\number\year /\number\month /\number\day}
+
+\usepackage{subfigure}
+\graphicspath{{pic/}}
+\usepackage{geometry}
+\geometry{left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
+
+\begin{document}
+	\maketitle
+	\iffalse
+	%多行公式 &对齐
+	\begin{align}
+	\\
+	&=
+	
+	\end{align}
+	
+	%圆括号矩阵
+	$$A_1=
+	\begin{pmatrix}
+	&   &   &   &  \\
+	&   &   &   &  \\
+	%\dots \ddots \vdots
+	\end{pmatrix}
+	$$
+	
+	%靠左
+	\begin{flushleft}
+		\\
+	\end{flushleft}
+	
+	%大括号表示
+	$$x_{k+1} =
+	\begin{cases}
+	x_k+s_k & \text{if } \rho_k>\eta_1\\
+	x_k & \text{otherwise} 
+	\end{cases}$$
+	
+	%文字样式
+	\uline{下划线}
+	\uuline{双下划线}
+	\uwave{波浪线}
+	\sout{中间删除线}
+	\xout{斜删除线}
+	\dashuline{虚线}
+	\dotuline{加点}
+	\fi
+	\newpage
+	\tableofcontents
+	\newpage
+	\section{调和方程}
+	\subsection{$\S_{1.3}$第2题}
+	\kaishu{}
+	对一般的椭圆型方程$$
+	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}+\sum_{i=1}^{n}b_i \frac{\partial u}{\partial x_i}+cu=0$$
+	其中$(a_{ij})$为正定阵，$c\le 0$.证明弱极值原理，强极值原理成立.\\
+	
+	\songti{}\uuline{解答}：
+	
+	首先我们必须叙述清楚一般椭圆型方程极值原理的含义。\\
+	
+	\uwave{弱极值原理}：
+	
+	若$u\in C^2(B_1) \cap C(\bar{B_1})$，满足一般椭圆方程，则$u$不能在$B_1$内部取到非负最大值/非正最小值.
+
+	\uwave{强极值原理}：
+	
+	若$u\in C^2(B_1) \cap C(\bar{B_1})$，满足一般椭圆方程.设$x^0\in \partial B_1$，使得$$
+	u(x^0)>u(x),\forall x \in B_1$$
+	则有$$
+	\liminf_{t \to 0^+} \frac{u(x^0)-u(x^0-t\bm{n})}{t} >0 $$
+	其中$\bm{n}$为$\partial B_1$在$x_0$处的单位外法向量.\\
+	
+	证明：
+	
+	先证弱极值原理.记题中方程左端为$L(u)$，其中$L$是椭圆型微分算子，容易验证它是线性的.则椭圆型方程可以简写成$L(u)=0$.只证明非负最大值不能在内部取得.我们先考虑$L(u)>0$时的情形，然后用摄动的方法推证$L(u)=0$时也成立.
+	
+	$L(u)>0$，用反证法，假设$\exists x_0 \in B_1$，使得$u$在$x_0$处达到了非负最大值.那么有
+	$$
+	\begin{cases}
+	\left.u\right|_{x_0} &\ge 0  \\
+	\left. \frac{\partial u}{\partial x_i}\right|_{x_0} &=0 , \forall i  \\ \left.H=\left( \frac{\partial^2 u}{\partial x_i \partial x_j}\right)_{i,j} \right|_{x_0}&\le 0  
+	\end{cases}$$
+	但是，在${x_0}$处，有$$
+	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}>-cu\ge 0
+	$$
+	记$A=(a_{ij})$，则它是正定阵，那么在${x_0}$处，有
+	\begin{align}
+		&\qquad \sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}> 0\notag\\
+		&\Rightarrow tr(AH)>0\notag \\
+		&\Rightarrow tr(C^T CH)>0 ,\exists C \in \mathbb{R}^{n \times n}\notag \\
+		&\Rightarrow tr(CHC^T)>0 \notag\\
+		&\Rightarrow \text{H正定，矛盾！}\notag 
+	\end{align}
+	
+	下面考虑一般的情形，取$h=e^{kx_1}$，其中$k>0$，考察函数$u_{\epsilon}=u+\epsilon h$，有$L(u_{\epsilon})=L(u+\epsilon h)=L(u)+\epsilon L(h)=0+\epsilon(a_{11}k^2+b_1 kh+ch)h$，我们希望有$L(u+\epsilon h)>0$，可以取$h$足够大，那么对足够小的$\epsilon$，$u_{\epsilon}$的非负最大值恒在边界上取得，考虑到$u_{\epsilon}$的连续性，令$\epsilon \to 0$，即得证.
+	
+	下面证明强极值原理.我们希望构造函数$w=u-v$，对$w$使用弱极值原理.而函数$v$满足
+	$$\begin{cases}
+		\left.v\right|_{\partial B_1} =0\\
+		L(v)<0,in \quad B_1\backslash B_{\frac{1}{2}} \\ 
+		\frac{\partial v}{\partial \bm{n}}>0
+	\end{cases}$$
+	可以取$$
+	v=v_\alpha=e^{-\alpha}-e^{-\alpha r^2}$$
+	取$\alpha$足够大就可以满足上面的要求，剩下的工作和书上的做法是类似的.\\
+	
+	\subsection{$\S_{1.2}$第9题}
+	\kaishu{}
+	设$u$为带状区域$\Sigma=\{(x_1,x_2)||x_1|\le 1, \quad -\infty<x_2< \infty\}$上的非负调和函数，证明：$$
+	u(x)\le u(0)e^{C|x_2|},\quad \forall |x_1|\le \frac{1}{4},\quad -\infty<x_2< \infty		$$
+	其中常数$C$不依赖于$u$.(提示：Harnack不等式)\\
+	
+	\songti{}
+	\uuline{解答}：
+	
+	对于任意的$x=(x_1,x_2)\in \Sigma$，取半径为$\frac{3}{16}$的圆，用“滚圆法”折线连接$(x_1,x_2),(x_1,0),(0,0)$三点，假设总共需要N+2个圆$\{B_k\}_{k=1}^{N+2}$，那么第1，N，N+2个圆的圆心即为这三个点，记这些圆的圆心分别为$\{x^k\}_{k=1}^{N+2}$.
+	
+	
+	此时满足注1.2.3的条件，可以使用Harnack不等式的推论，有
+	\begin{align}
+		u(x)&=u(x^1)\notag \\
+		&\le C(n)u(x^2) \notag\\
+		&\le (C(n))^2 u(x^3) \notag \\
+		&\le \dots \notag \\
+		&\le (C(n))^{N+1}u(x^{N+2}) \notag \\
+		&= (C(n))^{N+1}u(0) \notag
+	\end{align}\\
+	且显然有
+	\begin{align}
+		&\qquad (N-1)\frac{3}{16} \le |x_2|	\notag \\
+		&\Rightarrow N \le \frac{16}{3}|x_2| +1 \notag \\
+		&\Rightarrow N+1 \le \frac{16}{3}|x_2| +2 \notag \\
+		&\Rightarrow u(x) \le (C(n))^{\frac{16}{3}|x_2| +2}u(0) \notag 
+	\end{align}\\
+	原题应当有误，右端还应该多一个常数.\\
+	
+	\subsection{$\S_{1.2}$第10题}
+	\kaishu{}
+	设$u \in C^2(\overline{\mathbb{R}_{+}^{n}})$为$\overline{\mathbb{R}_{+}^n}=\{(x_1,\dots,x_n)\in \mathbb{R}^n|x_n \ge 0\}$上的调和函数.若满足$u(x_1,\dots,x_{n-1},0)=0$且$u(x)$为有界函数，证明$u\equiv 0$.(提示：延拓为全空间调和函数)若把$u$改为下有界函数，试举出例子使得结论不成立.\\
+	
+	\songti{}
+	\uuline{解答}：
+	
+	对$x=(x_1,x_2,\dots,x_n)\in \mathbb{R}^n$，定义$\bar{x}=(x_1,x_2,\dots,-x_n)$.	
+
+	我们给出$u$的全空间调和延拓的构造，然后应用Liouville型定理即可.$$
+	v(x)=\begin{cases}
+	u(x) & \text{if } x_n \ge 0\\
+	\overline{u(\bar{x})} & \text{if } x_n < 0
+	\end{cases}$$
+	若把$u$改为下有界函数，结论不成立，反例有$u(x)=x_n$.
+	
+	\subsection{$\S_{1.2}$第11题}
+	\kaishu{}
+	若$u$为$\mathbb{R}^2$上的调和函数.设$0<a\le b\le c$满足$b^2=ac$，证明$$
+	\int_{\mathbb{S}^1} u(x^0+a\omega)u(x^0+c\omega)dS_{\omega}=\int_{\mathbb{S}^1}
+	u^2 (x^0+b\omega)dS_{\omega}	$$
+	(提示：固定$b$后，对上式左端求导.)上述结论对一般维数$\mathbb{R}^n$也成立，有兴趣的同学可以自己证明.\\
+	
+	\songti{}
+	\uuline{解答}：
+	
+	固定b，记$f(a)=\int_{\mathbb{S}^1} u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega}$，只要证明$f^{'}(a)=0$即可.
+	\begin{align}
+		&\qquad f^{'}(a)=\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\frac{b^2}{a^2}\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega}\notag \\
+		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}a\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{b^2}{a}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega}\right)		\notag\\
+		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}\frac{\partial u(x^0+aw)}{\partial n_{\omega}}u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{\partial u(x^0+\frac{b^2}{a}w)}{\partial n_{\omega}} u(x^0+a\omega)dS_{\omega}\right)		\notag\\
+		&\stackrel{\text{Green第二公式}}{=}\frac{1}{a} \left(\iint_{B_1}\Delta u(x^0+aw)u(x^0+\frac{b^2}{a}\omega)d\omega -\iint_{B_1} \Delta u(x^0+\frac{b^2}{a}w) u(x^0+a\omega)d\omega\right)		\notag\\
+		&=0 \notag
+	\end{align}
+	
+	\subsection{$\S_{1.3}$第4题}
+	
+	
+\end{document}
