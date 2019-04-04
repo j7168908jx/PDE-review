@@ -19,28 +19,23 @@
 \usepackage{listings}%插入代码
 \lstset{language=Matlab}
 \lstset{breaklines}%自动将长的代码行换行排版
-\lstset{extendedchars=false}%解决代码跨页时，章节标题，页眉等汉字不显示的问题
+\lstset{extendedchars=false}%解决代码跨页时,章节标题,页眉等汉字不显示的问题
 
 \usepackage{ulem}
-
 \title{数理方程习题}
 \author{中国语言文学系常代表办公室}
-\renewcommand{\today}{\number\year /\number\month /\number\day}
+\renewcommand{\today}{Latest published at \number\year /\number\month /\number\day}
 
-\usepackage{subfigure}
-\graphicspath{{pic/}}
-\usepackage{geometry}
-\geometry{left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
 
 \begin{document}
 	\maketitle
 	\iffalse
 	%多行公式 &对齐
-	\begin{align}
+	\begin{align*}
 	\\
 	&=
 	
-	\end{align}
+	\end{align*}
 	
 	%圆括号矩阵
 	$$A_1=
@@ -76,75 +71,102 @@
 	\tableofcontents
 	\newpage
 	\section{调和方程}
-	\subsection{$\S_{1.3}$第2题}
-	\kaishu{}
-	对一般的椭圆型方程$$
-	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}+\sum_{i=1}^{n}b_i \frac{\partial u}{\partial x_i}+cu=0$$
-	其中$(a_{ij})$为正定阵，$c\le 0$.证明弱极值原理，强极值原理成立.\\
-	
-	\songti{}\uuline{解答}：
-	
-	首先我们必须叙述清楚一般椭圆型方程极值原理的含义。\\
-	
-	\uwave{弱极值原理}：
-	
-	若$u\in C^2(B_1) \cap C(\bar{B_1})$，满足一般椭圆方程，则$u$不能在$B_1$内部取到非负最大值/非正最小值.
+    \subsection{方程的物理背景和定解决问题}
+    \subsubsection{内容提要}
+    
+    \begin{itemize}
+        \item 这门课研究什么？
+        \begin{enumerate}
+            \item 解方程 -- 但是方程大多数时候没有显式解
+            \item 解的性质:适应性(存在性、唯一性、稳定性)
+            \item 定解问题:使得解适定的问题
+            \item 定解条件:边值条件(边值问题):Dirichlet, Neumann, Robin
+        \end{enumerate}
+        \item 调和函数(Laplace方程,齐次Possion方程): $-\Delta u = 0$,\\ Possion方程: $-\Delta u = f$.\\ 三类边值条件.\\ 外问题(通常需要给出$|x|\rightarrow\infty$时的边界条件,反例请读者自己想想).
+        \item 变分原理:调和函数$\leftrightarrow$能量最(极)小元
+        
+        例:$$E(u) = \mathop{\inf}_{v\in U} E(v), \qquad E(v) := \int_{\Omega} \frac12 | \nabla u |^2 dx$$
+        \item 复习常用工具
+        \begin{enumerate}
+            \item Green 公式(分部积分)
+            微积分基本定理$$\int_a^bf'dx = f(b) - f(a)$$ \\
+            分部积分公式$$\int_a^bf'gdx = fg\Big|_a^b - \int_a^bfg'dx$$\\
+            高维时(若$\Omega$光滑)
+            $$ \begin{cases}
+                \int_{\Omega} f_{x_i}dx = \int_{\partial \Omega}f \cdot \nu_i ds, \qquad\qquad \nu = (\nu_1, \dots, \nu_n) \text{为外法向} \\
+                \int_{\Omega} f_{x_i}gdx = \int_{\partial \Omega}fg\nu_ids - \int_{\Omega}fg_{x_i}dx \\
+                \end{cases}$$
+            或者写成以下形式
+            \begin{align*} 
+            \int_{\Omega} \Delta f \cdot g dx &= - \int_{\Omega} \nabla f \cdot \nabla g dx + \int_{\partial \Omega} g \cdot \frac{\partial f}{\partial \bm{n}} ds \\
+            &= \int_{\Omega} f \Delta g dx - \int_{\partial \Omega} f \frac{\partial g}{\partial\bm{n}}ds + \int_{\partial \Omega} g \frac{\partial f}{\partial\bm{n}}ds
+            \end{align*}
+            
+            \item 常用引理:若$f \in C(\Omega)$且$\int_{\Omega} f \varphi dx \equiv 0, \forall \varphi \in C(\Omega)$,则$f\equiv0$.
+            
+            \item 常用公式: $ r = |y|, y \in \mathbb{R}^n $ 则$ \nabla r = \frac{y}{r}$,且$\Delta \frac1{|y|^{n-2}} = \Delta \frac1{r^{n-2}} = 0 (\forall n \geq 3)$,而$n=2$时有$\Delta \ln |r| = 0$.
+            
+            \item 场论中的常用符号及计算
+            \begin{enumerate}
+                \item 若$\bm f = P \bm i + Q \bm j + R \bm k $, 
+                \begin{align*}
+                \text{curl}\ \bm f &= \nabla \times \bm f = \left|
+                \begin{array}{ccc}
+                \bm i & \bm j & \bm k \\
+                \partial_1 & \partial_2 & \partial_3 \\
+                P & Q & R
+                \end{array} \right| \\ 
+                \text{div}\ \bm f &= \nabla \cdot \bm f = \partial_1 \cdot P + \partial_2 \cdot Q + \partial_3 \cdot R 
+                \end{align*}
+                \item div, curl都是线性的
+                \item $ \nabla \cdot (f\bm a) = f \cdot (\nabla \cdot \bm a) + \nabla f \cdot \bm a$
+                \item $ \nabla \times (f\bm a) = f \cdot(\nabla\times\bm a) + \nabla f \times \bm a$
+                \item $ \nabla \cdot (\bm a \times \bm b) = \bm b (\nabla\times\bm a) - \bm a (\nabla\times\bm b)$
+                \item $\nabla\times(\nabla f) = (\nabla \times \nabla) f = 0$
+                \item $\nabla \cdot (\nabla \times\bm a) = 0$
+                
+            \end{enumerate}
+            \item (习题$\S_{1.1}$第1-2题) Laplace算子在2维极坐标$(r, \theta)$,3维球坐标$(r, \theta, \varphi)$,3维柱坐标$(r, \theta, z)$下的表示:
+            \begin{align*}
+            \Delta u &= \frac1r \frac{\partial}{\partial r}(r\frac{\partial u}{\partial r}) + \frac1{r^2} \frac{\partial^2 u}{\partial \theta^2}\\
+            \Delta u &= \frac1{r^2} \frac\partial{\partial r}(r^2\frac{\partial u}{\partial r}) + \frac1{r^2\sin\theta}\frac\partial{\partial \theta}(\sin\theta\frac{\partial u}{\partial\theta}) + \frac1{r^2\sin^2\theta}\frac{\partial^2u}{\partial\varphi^2}\\ 
+            \Delta u &= \frac1r \frac\partial{\partial r}(r\frac{\partial u}{\partial r}) + \frac1{r^2}\frac{\partial^2u}{\partial\theta^2} + \frac{\partial^2u}{\partial z^2}
+            \end{align*}
+            
+            \item (习题$\S_{1.1}$第5题)若$u(x)\in C^\infty$为$\mathbb{R}^n$上的调和函数,\\ 则$u(x)$在正交变换下保持调和.\\ {\bf Kelvin变换}:$$v(y) = \frac1{|y|^{n-2}}u(\frac{y}{|y|^2}),\qquad y\neq0,$$ $v$为$\mathbb{R}^n \backslash\{0\}$上的调和函数.
+        
+        \end{enumerate}
+    
+    \end{itemize}
 
-	\uwave{强极值原理}：
-	
-	若$u\in C^2(B_1) \cap C(\bar{B_1})$，满足一般椭圆方程.设$x^0\in \partial B_1$，使得$$
-	u(x^0)>u(x),\forall x \in B_1$$
-	则有$$
-	\liminf_{t \to 0^+} \frac{u(x^0)-u(x^0-t\bm{n})}{t} >0 $$
-	其中$\bm{n}$为$\partial B_1$在$x_0$处的单位外法向量.\\
-	
-	证明：
-	
-	先证弱极值原理.记题中方程左端为$L(u)$，其中$L$是椭圆型微分算子，容易验证它是线性的.则椭圆型方程可以简写成$L(u)=0$.只证明非负最大值不能在内部取得.我们先考虑$L(u)>0$时的情形，然后用摄动的方法推证$L(u)=0$时也成立.
-	
-	$L(u)>0$，用反证法，假设$\exists x_0 \in B_1$，使得$u$在$x_0$处达到了非负最大值.那么有
-	$$
-	\begin{cases}
-	\left.u\right|_{x_0} &\ge 0  \\
-	\left. \frac{\partial u}{\partial x_i}\right|_{x_0} &=0 , \forall i  \\ \left.H=\left( \frac{\partial^2 u}{\partial x_i \partial x_j}\right)_{i,j} \right|_{x_0}&\le 0  
-	\end{cases}$$
-	但是，在${x_0}$处，有$$
-	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}>-cu\ge 0
-	$$
-	记$A=(a_{ij})$，则它是正定阵，那么在${x_0}$处，有
-	\begin{align}
-		&\qquad \sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}> 0\notag\\
-		&\Rightarrow tr(AH)>0\notag \\
-		&\Rightarrow tr(C^T CH)>0 ,\exists C \in \mathbb{R}^{n \times n}\notag \\
-		&\Rightarrow tr(CHC^T)>0 \notag\\
-		&\Rightarrow \text{H正定，矛盾！}\notag 
-	\end{align}
-	
-	下面考虑一般的情形，取$h=e^{kx_1}$，其中$k>0$，考察函数$u_{\epsilon}=u+\epsilon h$，有$L(u_{\epsilon})=L(u+\epsilon h)=L(u)+\epsilon L(h)=0+\epsilon(a_{11}k^2+b_1 kh+ch)h$，我们希望有$L(u+\epsilon h)>0$，可以取$h$足够大，那么对足够小的$\epsilon$，$u_{\epsilon}$的非负最大值恒在边界上取得，考虑到$u_{\epsilon}$的连续性，令$\epsilon \to 0$，即得证.
-	
-	下面证明强极值原理.我们希望构造函数$w=u-v$，对$w$使用弱极值原理.而函数$v$满足
-	$$\begin{cases}
-		\left.v\right|_{\partial B_1} =0\\
-		L(v)<0,in \quad B_1\backslash B_{\frac{1}{2}} \\ 
-		\frac{\partial v}{\partial \bm{n}}>0
-	\end{cases}$$
-	可以取$$
-	v=v_\alpha=e^{-\alpha}-e^{-\alpha r^2}$$
-	取$\alpha$足够大就可以满足上面的要求，剩下的工作和书上的做法是类似的.\\
-	
-	\subsection{$\S_{1.2}$第9题}
+    \subsubsection{$\S_{1.1}$第6题}
+    \kaishu{}
+    设$$J(u) = \int_{\Omega}| \nabla u |^2dx + \int_{\Omega}(\frac12\sigma u^2-gu)ds,$$其中$\Omega$为n维区域.变分问题的提法为:求$u\in U$使得$$J(u) = \mathop{\inf}_{v\in U} J(v),$$其中$U=C^2(\Omega)\bigcap C^1(\bar{\Omega})$.试导出与此变分问题等价的边值问题,并证明两者的等价性.	
+    
+    % todo: 检查证明
+    \songti{}
+    \uuline{解答}:
+    
+    ``$\Leftarrow$'':记 $f(t) = J(u+tw), w\in U$,则$f(t)$在$t=0$处取极小值,即$$ 0 = \frac{df}{dt}|_{t=0} = -\int_{\Omega} \Delta u \cdot w dx + \int_{\partial \Omega} 2 \frac{\partial u }{\partial \bm{n}} w + \sigma uw - gw ds, \qquad \forall w.
+    $$
+    取$w|_{\partial\Omega} = 0 \Rightarrow \Delta u = 0$,而
+    $$ 0 = \int_{\partial \Omega}(2 \frac{\partial u }{\partial \bm{n}} + \sigma u - g)w ds = 0 \Rightarrow 2\frac{\partial u }{\partial \bm{n}} + \sigma u = g, \qquad \text{on}\ \partial \Omega.$$
+    
+    ``$\Rightarrow$'':类似的,利用$$J(u+w) = J(u) + \int_{\Omega} \nabla u \cdot \nabla w dx + \int_{\partial \Omega}(\sigma u -g )w ds \geq J(u)$$即得.
+
+	\subsubsection{$\S_{1.2}$第9题}
 	\kaishu{}
-	设$u$为带状区域$\Sigma=\{(x_1,x_2)||x_1|\le 1, \quad -\infty<x_2< \infty\}$上的非负调和函数，证明：$$
+	设$u$为带状区域$\Sigma=\{(x_1,x_2)||x_1|\le 1, \quad -\infty<x_2< \infty\}$上的非负调和函数,证明:$$
 	u(x)\le u(0)e^{C|x_2|},\quad \forall |x_1|\le \frac{1}{4},\quad -\infty<x_2< \infty		$$
-	其中常数$C$不依赖于$u$.(提示：Harnack不等式)\\
+	其中常数$C$不依赖于$u$.(提示:Harnack不等式)\\
 	
 	\songti{}
-	\uuline{解答}：
+	\uuline{解答}:
 	
-	对于任意的$x=(x_1,x_2)\in \Sigma$，取半径为$\frac{3}{16}$的圆，用“滚圆法”折线连接$(x_1,x_2),(x_1,0),(0,0)$三点，假设总共需要N+2个圆$\{B_k\}_{k=1}^{N+2}$，那么第1，N，N+2个圆的圆心即为这三个点，记这些圆的圆心分别为$\{x^k\}_{k=1}^{N+2}$.
+	对于任意的$x=(x_1,x_2)\in \Sigma$,取半径为$\frac{3}{16}$的圆,用“滚圆法”折线连接$(x_1,x_2),(x_1,0),(0,0)$三点,假设总共需要N+2个圆$\{B_k\}_{k=1}^{N+2}$,那么第1,N,N+2个圆的圆心即为这三个点,记这些圆的圆心分别为$\{x^k\}_{k=1}^{N+2}$.
 	
 	
-	此时满足注1.2.3的条件，可以使用Harnack不等式的推论，有
+	此时满足注1.2.3的条件,可以使用Harnack不等式的推论,有
 	\begin{align}
 		u(x)&=u(x^1)\notag \\
 		&\le C(n)u(x^2) \notag\\
@@ -160,44 +182,279 @@
 		&\Rightarrow N+1 \le \frac{16}{3}|x_2| +2 \notag \\
 		&\Rightarrow u(x) \le (C(n))^{\frac{16}{3}|x_2| +2}u(0) \notag 
 	\end{align}\\
-	原题应当有误，右端还应该多一个常数.\\
+	{\color{red}{原题应当有误,右端还应该多一个常数.}}\\
 	
-	\subsection{$\S_{1.2}$第10题}
+	\subsubsection{$\S_{1.2}$第10题}
 	\kaishu{}
-	设$u \in C^2(\overline{\mathbb{R}_{+}^{n}})$为$\overline{\mathbb{R}_{+}^n}=\{(x_1,\dots,x_n)\in \mathbb{R}^n|x_n \ge 0\}$上的调和函数.若满足$u(x_1,\dots,x_{n-1},0)=0$且$u(x)$为有界函数，证明$u\equiv 0$.(提示：延拓为全空间调和函数)若把$u$改为下有界函数，试举出例子使得结论不成立.\\
+	设$u \in C^2(\overline{\mathbb{R}_{+}^{n}})$为$\overline{\mathbb{R}_{+}^n}=\{(x_1,\dots,x_n)\in \mathbb{R}^n|x_n \ge 0\}$上的调和函数.若满足$u(x_1,\dots,x_{n-1},0)=0$且$u(x)$为有界函数,证明$u\equiv 0$.(提示:延拓为全空间调和函数)若把$u$改为下有界函数,试举出例子使得结论不成立.\\
 	
 	\songti{}
-	\uuline{解答}：
+	\uuline{解答}:
 	
-	对$x=(x_1,x_2,\dots,x_n)\in \mathbb{R}^n$，定义$\bar{x}=(x_1,x_2,\dots,-x_n)$.	
+	对$x=(x_1,x_2,\dots,x_n)\in \mathbb{R}^n$,定义$\bar{x}=(x_1,x_2,\dots,-x_n)$.	
 
-	我们给出$u$的全空间调和延拓的构造，然后应用Liouville型定理即可.$$
+	我们给出$u$的全空间调和延拓的构造,然后应用Liouville型定理即可.$$
 	v(x)=\begin{cases}
 	u(x) & \text{if } x_n \ge 0\\
 	\overline{u(\bar{x})} & \text{if } x_n < 0
 	\end{cases}$$
-	若把$u$改为下有界函数，结论不成立，反例有$u(x)=x_n$.
+	若把$u$改为下有界函数,结论不成立,反例有$u(x)=x_n$.
 	
-	\subsection{$\S_{1.2}$第11题}
+	\subsubsection{$\S_{1.2}$第11题}
 	\kaishu{}
-	若$u$为$\mathbb{R}^2$上的调和函数.设$0<a\le b\le c$满足$b^2=ac$，证明$$
+	若$u$为$\mathbb{R}^2$上的调和函数.设$0<a\le b\le c$满足$b^2=ac$,证明$$
 	\int_{\mathbb{S}^1} u(x^0+a\omega)u(x^0+c\omega)dS_{\omega}=\int_{\mathbb{S}^1}
 	u^2 (x^0+b\omega)dS_{\omega}	$$
-	(提示：固定$b$后，对上式左端求导.)上述结论对一般维数$\mathbb{R}^n$也成立，有兴趣的同学可以自己证明.\\
+	(提示:固定$b$后,对上式左端求导.)上述结论对一般维数$\mathbb{R}^n$也成立,有兴趣的同学可以自己证明.\\
 	
 	\songti{}
-	\uuline{解答}：
+	\uuline{解答}:
 	
-	固定b，记$f(a)=\int_{\mathbb{S}^1} u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega}$，只要证明$f^{'}(a)=0$即可.
-	\begin{align}
-		&\qquad f^{'}(a)=\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\frac{b^2}{a^2}\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega}\notag \\
-		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}a\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{b^2}{a}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega}\right)		\notag\\
-		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}\frac{\partial u(x^0+aw)}{\partial n_{\omega}}u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{\partial u(x^0+\frac{b^2}{a}w)}{\partial n_{\omega}} u(x^0+a\omega)dS_{\omega}\right)		\notag\\
-		&\stackrel{\text{Green第二公式}}{=}\frac{1}{a} \left(\iint_{B_1}\Delta u(x^0+aw)u(x^0+\frac{b^2}{a}\omega)d\omega -\iint_{B_1} \Delta u(x^0+\frac{b^2}{a}w) u(x^0+a\omega)d\omega\right)		\notag\\
+	固定b,记$f(a)=\int_{\mathbb{S}^1} u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega}$,只要证明$f^{'}(a)=0$即可.
+	\begin{align*}
+		&\qquad f^{'}(a)=\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\frac{b^2}{a^2}\int_{\mathbb{S}^1}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega} \\
+		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}a\omega\cdot \nabla u(x^0+a\omega)u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{b^2}{a}\omega\cdot \nabla u(x^0+\frac{b^2}{a}\omega) u(x^0+a\omega)dS_{\omega}\right)	\\
+		&=\frac{1}{a} \left(\int_{\mathbb{S}^1}\frac{\partial u(x^0+aw)}{\partial n_{\omega}}u(x^0+\frac{b^2}{a}\omega)dS_{\omega} -\int_{\mathbb{S}^1}\frac{\partial u(x^0+\frac{b^2}{a}w)}{\partial n_{\omega}} u(x^0+a\omega)dS_{\omega}\right)	\\
+		&\stackrel{\text{Green第二公式}}{=}\frac{1}{a} \left(\iint_{B_1}\Delta u(x^0+aw)u(x^0+\frac{b^2}{a}\omega)d\omega -\iint_{B_1} \Delta u(x^0+\frac{b^2}{a}w) u(x^0+a\omega)d\omega\right)	\\
 		&=0 \notag
+	\end{align*}
+	
+	\subsubsection{$\S_{1.3}$第2题}
+	\kaishu{}
+	对一般的椭圆型方程$$
+	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}+\sum_{i=1}^{n}b_i \frac{\partial u}{\partial x_i}+cu=0$$
+	其中$(a_{ij})$为正定阵,$c\le 0$.证明弱极值原理,强极值原理成立.\\
+	
+	\songti{}\uuline{解答}:
+	
+	首先我们必须叙述清楚一般椭圆型方程极值原理的含义.\\
+	
+	\uwave{弱极值原理}:
+	
+	若$u\in C^2(B_1) \cap C(\bar{B_1})$,满足一般椭圆方程,则$u$不能在$B_1$内部取到非负最大值/非正最小值.
+	
+	\uwave{强极值原理}:
+	
+	若$u\in C^2(B_1) \cap C(\bar{B_1})$,满足一般椭圆方程.设$x^0\in \partial B_1$,使得$$
+	u(x^0)>u(x),\forall x \in B_1$$
+	则有$$
+	\liminf_{t \to 0^+} \frac{u(x^0)-u(x^0-t\bm{n})}{t} >0 $$
+	其中$\bm{n}$为$\partial B_1$在$x_0$处的单位外法向量.\\
+	
+	证明:
+	
+	先证弱极值原理.记题中方程左端为$L(u)$,其中$L$是椭圆型微分算子,容易验证它是线性的.则椭圆型方程可以简写成$L(u)=0$.只证明非负最大值不能在内部取得.我们先考虑$L(u)>0$时的情形,然后用摄动的方法推证$L(u)=0$时也成立.
+	
+	$L(u)>0$,用反证法,假设$\exists x_0 \in B_1$,使得$u$在$x_0$处达到了非负最大值.那么有
+	$$
+	\begin{cases}
+	\left.u\right|_{x_0} &\ge 0  \\
+	\left. \frac{\partial u}{\partial x_i}\right|_{x_0} &=0 , \forall i  \\ \left.H=\left( \frac{\partial^2 u}{\partial x_i \partial x_j}\right)_{i,j} \right|_{x_0}&\le 0  
+	\end{cases}$$
+	但是,在${x_0}$处,有$$
+	\sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}>-cu\ge 0
+	$$
+	记$A=(a_{ij})$,则它是正定阵,那么在${x_0}$处,有
+	\begin{align}
+	&\qquad \sum_{i,j=1}^{n}a_{ij}\frac{\partial^2 u}{\partial x_i \partial x_j}> 0\notag\\
+	&\Rightarrow tr(AH)>0\notag \\
+	&\Rightarrow tr(C^T CH)>0 ,\exists C \in \mathbb{R}^{n \times n}\notag \\
+	&\Rightarrow tr(CHC^T)>0 \notag\\
+	&\Rightarrow \text{H正定,矛盾！}\notag 
 	\end{align}
 	
-	\subsection{$\S_{1.3}$第4题}
+	下面考虑一般的情形,取$h=e^{kx_1}$,其中$k>0$,考察函数$u_{\epsilon}=u+\epsilon h$,有$L(u_{\epsilon})=L(u+\epsilon h)=L(u)+\epsilon L(h)=0+\epsilon(a_{11}k^2+b_1 kh+ch)h$,我们希望有$L(u+\epsilon h)>0$,可以取$h$足够大,那么对足够小的$\epsilon$,$u_{\epsilon}$的非负最大值恒在边界上取得,考虑到$u_{\epsilon}$的连续性,令$\epsilon \to 0$,即得证.
+	
+	下面证明强极值原理.我们希望构造函数$w=u-v$,对$w$使用弱极值原理.而函数$v$满足
+	$$\begin{cases}
+	\left.v\right|_{\partial B_1} =0\\
+	L(v)<0,in \quad B_1\backslash B_{\frac{1}{2}} \\ 
+	\frac{\partial v}{\partial \bm{n}}>0
+	\end{cases}$$
+	可以取$$
+	v=v_\alpha=e^{-\alpha}-e^{-\alpha r^2}$$
+	取$\alpha$足够大就可以满足上面的要求,剩下的工作和书上的做法是类似的.\\
 	
 	
+	\subsubsection{$\S_{1.3}$第4题}
+	\kaishu{}给出一个函数$\varphi$的例子,满足定理1.3.3中截断函数的性质.\\
+	
+	\songti{}\uuline{解答}:
+	%可以用C无穷的函数作变限积分的上下限——王旭磊
+	首先我们给出所需要的性质:$$
+	\varphi(x)=\begin{cases}
+	1 &  x\in B_{\frac{1}{2}}\\
+	0 &  x \in B_1 \backslash B_{\frac{3}{4}}
+	\end{cases}	\qquad \varphi \in C_{c}^{\infty}(B_1)$$
+	
+	考虑使用磨光算子的方法.
+	
+	考察$$
+	\bar{\varphi}(x)=	\begin{cases}
+	\frac{1}{e^{|x|^2-1}} & \text{if } |x|<1\\
+	0 & \text{if }  |x| \ge 1
+	\end{cases}$$ \\
+	显然,$\bar{\varphi} \in C_{c}^{\infty}(\mathbb{R}^n),supp(\bar{\varphi})=B_1$,我们记$$
+	c=\int_{\mathbb{R}^n} \bar{\varphi}(x)dx	$$\\
+	如果$$
+	\alpha(x)=\frac{1}{c}\bar{\varphi}(x)	$$\\
+	那么$$
+	\int_{\mathbb{R}^n} \alpha(x)dx=1	$$\\
+	下面构造一簇$\epsilon$-相关的函数$$
+	\alpha_{\epsilon}(x)=\frac{1}{\epsilon^n}\alpha\left(\frac{x}{\epsilon}\right)	$$\\
+	则$\alpha_{\epsilon} \in C_{c}^{\infty}(\mathbb{R}^n),supp(\alpha_{\epsilon})=B_{\epsilon},\text{并且}\int_{\mathbb{R}^n} \alpha_{\epsilon}(x)dx=1$.直观上,$\alpha_{\epsilon}$这个函数的主要部分都集中在一个很小的球内.
+	
+	我们只在径向上考虑这个问题,取$$
+	\psi(x)=	\begin{cases}
+	1 & \text{if } |x|\le \frac{5}{8}\\
+	0 & \text{if }  |x| > \frac{5}{8}
+	\end{cases}$$ \\
+	令
+	\begin{align}
+		\varphi(x)&=\psi(x)\ast \alpha_{\epsilon} \notag \\
+		&= \int_{\mathbb{R}^n} \psi(y) \alpha_{\epsilon}(x-y) dy  \notag
+	\end{align}
+	可以看到,积分区域其实是$\{ \left. y\right| |x-y| \le \epsilon \} $,因此我们可以取$\epsilon=\frac{1}{16}$.由卷积转移求导的性质,易见径向函数$\varphi(x)$即为所求.
+	
+	\subsubsection{$\S_{1.3}$第7题}
+	\kaishu{}证明球$B_R$上的梯度估计:若$u \in C^2(B_R) \cap C(\bar{B}_R)$为调和函数,则成立$$
+	\sup_{B_{\frac{R}{2}}} |\nabla u| \le \frac{c(n)}{R} \sup_{\partial B_R}|u|,	$$
+	其中$c(n)$为只依赖于空间维数$n$的正常数.\\
+	
+	\songti{}\uuline{解答}:\\
+	
+	两种做法,其一是使用Bochner技巧,依照书上的推导过程再写一遍,只要将$R$固定,取新的截断函数$\varphi_R(x)=\varphi\left(\frac{x}{R} \right)$即可.
+	
+	另一种做法是直接利用单位球$B_1$上的梯度估计.
+	
+	对于上述的函数$u$,构造函数$v(x)=u(Rx)$,于是$v \in C^2(B_1) \cap C(\bar{B}_1)$,所以
+	\begin{align}
+	&\qquad \sup_{B_{\frac{1}{2}}} |\nabla v| \le c(n) \sup_{\partial B_1}|v| \notag \\
+	&\Rightarrow R \sup_{B_{\frac{R}{2}}} |\nabla u| \le c(n) \sup_{\partial B_R}|u| \notag \\
+	&\Rightarrow \sup_{B_{\frac{R}{2}}} |\nabla u| \le \frac{c(n)}{R} \sup_{\partial B_R}|u| \notag.
+	\end{align}
+	
+	\subsubsection{$\S_{1.4}$第3题}
+	\kaishu{}验证2维圆盘的Green函数和半空间的Green函数公式成立.\\
+	
+	\songti{}\uuline{解答}:
+	
+	考虑$x\in B_R$关于$\partial B_R$的反演点$$\tilde{x}=\frac{R^2 }{|x|^2}x.$$
+	电势函数为$$
+	\Gamma (x-y)=\frac{1}{2\pi}	ln\frac{1}{|x-y|}.$$
+	限制在边界$y\in \partial B_R$上时,我们有
+	\begin{align}
+		\Gamma(\tilde{x}-y)&=\frac{1}{2\pi}	ln\frac{1}{|\tilde{x}-y|} \notag\\
+		&=\frac{1}{2\pi} ln\frac{1}{|\frac{R^2 }{|x|^2}x-y|} \notag \\
+		&=\frac{1}{2\pi} \left( ln\frac{|x|}{R}+ln \frac{1}{|x-y|} \right) \notag \\
+		&=\frac{1}{2\pi} ln\frac{|x|}{R}+ \Gamma (x-y) \notag .
+	\end{align}
+	则令
+	\begin{align}
+		g(x,y) &= \Gamma(\tilde{x}-y)-\frac{1}{2\pi} ln\frac{|x|}{R} \notag\\
+		&= \frac{1}{2\pi} ln\left( \frac{R}{|x|} \cdot\frac{1}{|\tilde{x}-y|} \right)\notag.
+	\end{align}
+	如此,Green函数
+	\begin{align}
+		G(x,y)&=\Gamma(x-y) -g(x,y)\notag\\
+		&=\frac{1}{2\pi} ln\frac{1}{|x-y|}-\frac{1}{2\pi} ln\left( \frac{R}{|x|} \cdot\frac{1}{|\tilde{x}-y|}\right) \notag\\
+		&= \frac{1}{2\pi} ln\frac{1}{|x-y|}- \frac{1}{2\pi} ln \left| \frac{R}{|x|}x-\frac{|x|}{R}y\right| \notag
+	\end{align}
+	便完成了构造.至于上半平面的Green函数,构造起来非常容易,问题在于验证衰减性条件可以保证Green恒等式仍然成立.我们将这个问题作为一个独立的题目,在下一个习题中给出解答.
+	
+	\subsubsection{$\S_{1.4}$第6题}
+	\kaishu{}证明$u$满足(1.59)时,Green恒等式(1.47)依然成立.\\
+	
+	\songti{}\uuline{解答}:\\
+	
+	(1.59)即:$$
+	u(x)=o(1),\qquad |\nabla u(x)|=o\left( \frac{1}{|x|} \right), \qquad |x| \to \infty.	$$
+	要证的Green恒等式(1.47)为$$
+	u(x)= -\int_{\Omega} \Gamma(x-y) \Delta u(y) dy + \int_{\partial \Omega} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y.	$$
+	
+	%有人认为条件(1.59)只是针对$n \ge 3$而言的,若$n=2$,应有更强的衰减条件,这里面可能有一个mistake.
+	
+	此时$\Omega$是无界区域,我们希望使用有界区域去逼近之.记$\Omega_R=\Omega \cap B_R(x) ,\quad \gamma_1= \partial\Omega_R \backslash \partial B_R(x) ,\quad \gamma_2= \partial\Omega_R \backslash \partial \Omega $,如图\ref{pde1_4_6}所示.
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[scale=0.05]{PDE1_4_6.jpg}
+        \caption{$\Omega_R$}
+        \label{pde1_4_6}
+	\end{figure}
+	
+	于是利用Green公式,对每个固定的$R$,我们可以证明
+	\begin{align}
+		u(x)&= -\int_{\Omega_R} \Gamma(x-y) \Delta u(y) dy + \int_{\partial \Omega_R} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y \notag \\
+		&=-\int_{\Omega_R} \Gamma(x-y) \Delta u(y) dy + \int_{\gamma_1} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y \notag \\
+		&+\int_{\gamma_2} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y. \notag
+	\end{align}
+	显然我们有$$
+	\lim_{R \to \infty}	\Omega_R = \Omega ,\qquad \lim_{R \to \infty} \gamma_1 = \partial \Omega, $$
+	关键在于证明$$
+	\lim_{R \to \infty}\int_{\gamma_2} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y =0.	$$
+	$n \ge 3$时,
+	\begin{align}
+		&\quad \lim_{R \to \infty} \left|\int_{\gamma_2} \left(\Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) -u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right) dS_y \right| \notag \\
+		&\le \lim_{R \to \infty} C(n) R^{n-1} \left( \left| \Gamma(x-y) \frac{\partial u}{\partial \bm{n}_y}(y) \right|+\left|u(y)\frac{\partial \Gamma}{\partial \bm{n}_y}(x,y)   \right| \right) \notag \\
+		&\le \lim_{R \to \infty} C(n) R^{n-1} \left( O\left(\frac{1}{R^{n-2}}\right) \cdot o\left(\frac{1}{R}\right) +o(1) \cdot O\left(\frac{1}{R^{n-1}}\right)   \right) \notag \\
+		&= \lim_{R \to \infty} C(n) R^{n-1} \left(  o\left(\frac{1}{R^{n-1}}\right) + o\left(\frac{1}{R^{n-1}}\right) \right) \notag \\
+		&= 0 \notag
+	\end{align}
+	{\color{red}{$n=2$时,上面第一项的估计会难以进行,我们认为需要加强衰减性条件,需要$$
+	u(x)=o(1),\qquad |\nabla u(x)|=o\left( \frac{1}{|x|ln|x|} \right), \qquad |x| \to \infty.	$$}}
+	在新修订的教材上,添加了这样的条件$\exists a,C >0$,使得$$
+	|x|^a u(x)+|x|^{1+a} |Du(x)| + |x|^{2+a} |D^2 u(x)| \le C.	$$
+	如此,我们的证明可以进行下去了.其中二阶导数的控制条件应当是为了使得要证的式子第一项积分有意义.
+	
+	\subsubsection{$\S_{1.4}$第2题}
+	\kaishu{}证明Green函数的性质1-4.\\
+	$1.G(x,y)=0,x \in \Omega,y \in \partial \Omega,\\
+	2.G(x,y) \in C^2(\bar{\Omega}\times \bar{\Omega} \backslash \{y=x\}),$满足$$
+	0\le G(x,y) \le \begin{cases}
+	\Gamma(x-y), &n \ge 3\\
+	\Gamma(x-y)+\frac{1}{2\pi}lndiam(\Omega), &n=2.
+	\end{cases}	$$
+	当$y \to x$时,$G(x,y) \to + \infty$,其阶数和$\Gamma(x-y)$相同.\\
+	$3.G(x,y)=G(y,x), \qquad \forall x,y \in \Omega, y \ne x.\\
+	4.\int_{\partial \Omega} \frac{\partial G(x,y)}{\partial \bm{n}_x}dS_x =-1, \qquad \forall y \in \bar{\Omega}.$\\
+	
+	\songti{}\uuline{解答}:\\
+	
+	
+	\subsubsection{$\S_{1.4}$第10题}
+	\kaishu{}利用公式(1.54)重新证明单位球上调和函数的Harnack不等式.\\
+
+	\songti{}\uuline{解答}:\\
+	
+	\subsubsection{$\S_{1.4}$第11题}
+	\kaishu{}
+	(1) \textbf{Harnack 第一定理}\quad 设函数序列$\{u_k\} \subset  C(\bar{\Omega}) $为$\Omega$上的调和函数列.若$\{u_k\}$ 在$\partial \Omega$ 上一致收敛, 则它在$\Omega$ 上也一致收敛, 并且极限函数$u $也
+	是$\Omega $上的调和函数.\\
+	
+	(2)\textbf{ Harnack 第二定理}\quad 设$\{u_k\}$为$\Omega$上的一个单调不减的调和函数列.若$\{u_k\}$在$\Omega$中的某点P处收敛, 则它内闭一致收敛于$\Omega$ 上的一个调和函数$u $.\\
+	
+	\songti{}\uuline{解答}:\\
+	
+	\subsubsection{$\S_{1.4}$第12题}
+	\kaishu{}证明Dirichlet 外问题和Dirichlet 问题的等价性. (提示: 利用Kelvin 变换和奇点可去性定理.) 利用该等价性证明有界区域外定义的调和函数若在无穷远
+	衰减到0, 则衰减速度至少为$O(\frac{1}{r})$.\\
+
+	\songti{}\uuline{解答}:\\
+
+	\subsubsection{$\S_{1.4}$第13题}
+	\kaishu{}证明满足平均值性质的连续函数一定是调和函数.(提示: 利用Poisson 公式和极值原理的证明思想)\\
+	
+	\songti{}\uuline{解答}:\\
+	
+	按照提示,设$u$是满足平均值性质的连续函数,由平均值性质可以推出极值原理,故$u$有极值原理.由Poisson公式,记以$u$的边界值为边界的调和函数为$v$,则$u-v$也满足极值原理,但是在边界上取值恒为0,故$u-v\equiv 0$.
+	
+	另外,也可以先证明$u\in C^{\infty}$,再将证明平均值性质的过程倒推回去即可.
+
+	\subsubsection{$\S_{1.3}$第7题}
+	\kaishu{}利用梯度估计证明若$u \in C^{\infty}$为$\mathbb{R}^n$上的调和函数, 且存在自然数$k$ 使得$$
+	|u(x)| \sim |x|^k,\quad x \to \infty.$$
+	则$u $必为$k $阶多项式.(这些多项式称为调和多项式.)\\
+	
+	\songti{}\uuline{解答}:\\
+
 \end{document}
